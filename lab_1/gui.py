@@ -4,6 +4,7 @@ import pieces
 from Tkinter import *
 from PIL import ImageTk
 
+
 class GUI():
     pieces = {}
     selected_piece = None
@@ -63,8 +64,6 @@ class GUI():
             self.draw_pieces()
         self.focus(pos)
         self.draw_board()
-        
-        
 
     def shift(self, p1, p2):
         piece = self.chessboard[p1]
@@ -112,7 +111,6 @@ class GUI():
         self.canvas.tag_raise("occupied")
         self.canvas.tag_lower("area")
         
-
     def draw_pieces(self):
         self.canvas.delete("occupied")
         for coord, piece in self.chessboard.iteritems():
@@ -136,6 +134,8 @@ def main(chessboard):
     gui.draw_pieces()
     root.mainloop()
 
+
 if __name__ == "__main__":
     game = chessboard.Board()
     main(game)
+ 

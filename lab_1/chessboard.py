@@ -1,16 +1,12 @@
 #coding:utf8
 from copy import deepcopy
 import re
-
 import pieces
-
-
-
 
 START_PATTERN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w 0 1'
 
-class Board(dict):
 
+class Board(dict):
     y_axis = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
     x_axis = (1, 2, 3, 4, 5, 6, 7, 8)
     captured_pieces = { 'white': [], 'black': [] }
@@ -51,8 +47,6 @@ class Board(dict):
             self.move(p1, p2)
             self.complete_move(piece, dest, p1,p2)
 
-
-
     def move(self, p1, p2):
         piece = self[p1]
         try:
@@ -78,7 +72,6 @@ class Board(dict):
             movetext = abbr + 'x' + p2.lower()
             self.halfmove_clock = 0
         self.history.append(movetext)
-
 
     def all_moves_available(self, color):
         
@@ -112,11 +105,9 @@ class Board(dict):
             else:
                 return False
 
-
     def alpha_notation(self,xycoord):
         if xycoord[0] < 0 or xycoord[0] > 7 or xycoord[1] < 0 or xycoord[1] > 7: return
         return self.y_axis[xycoord[1]] + str(self.x_axis[xycoord[0]])
-
 
     def num_notation(self, coord):
         return int(coord[1])-1, self.y_axis.index(coord[0])
@@ -142,12 +133,12 @@ class Board(dict):
         self.halfmove_clock = int(pat[2])
         self.fullmove_number = int(pat[3])
 
-class ChessError(Exception): pass
 
+class ChessError(Exception): pass
 class Check(ChessError): pass
 class InvalidMove(ChessError): pass
 class CheckMate(ChessError): pass
 class Draw(ChessError): pass
 class NotYourTurn(ChessError): pass
 class InvalidCoord(ChessError): pass
-
+ 

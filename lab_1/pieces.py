@@ -13,6 +13,7 @@ def create_piece(piece, color='white'):
     module = sys.modules[__name__]
     return module.__dict__[piece](color)
 
+
 class Piece(object):
 
     def __init__(self, color):
@@ -54,26 +55,29 @@ class Piece(object):
         return map(board.alpha_notation, allowed_moves)
 
 
-
 class King(Piece):
     shortname = 'k'
     def moves_available(self,pos):
         return super(King, self).moves_available(pos.upper(), True, True, 1)
+
 
 class Queen(Piece):
     shortname = 'q'
     def moves_available(self,pos):
         return super(Queen, self).moves_available(pos.upper(), True, True, 8)
 
+
 class Rook(Piece):
     shortname = 'r'
     def moves_available(self,pos):
         return super(Rook, self).moves_available(pos.upper(), True, False, 8)
 
+
 class Bishop(Piece):
     shortname = 'b'
     def moves_available(self,pos):
         return super(Bishop,self).moves_available(pos.upper(), False, True, 8)
+
 
 class Knight(Piece):
     shortname = 'n'
@@ -119,5 +123,4 @@ class Pawn(Piece):
                 allowed_moves.append(attack)
         allowed_moves = filter(board.is_on_board, allowed_moves)
         return map(board.alpha_notation, allowed_moves)
-
-
+ 
