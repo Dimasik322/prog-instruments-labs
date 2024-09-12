@@ -1,7 +1,9 @@
 #coding:utf8
 import re
-import pieces
 from copy import deepcopy
+
+import pieces
+from pieces import Piece
 
 START_PATTERN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w 0 1'
 
@@ -15,15 +17,15 @@ class Board(dict):
     fullmove_number = 1
     history = []
 
-    def __init__(self, pat = None):
+    def __init__(self, pat: str = None) -> None:
         self.show(START_PATTERN)
 
-    def is_in_check_after_move(self, p1, p2):
+    def is_in_check_after_move(self, p1: str, p2: str) -> bool:
         tmp = deepcopy(self)
         tmp.move(p1,p2)
         return tmp.king_in_check(self[p1].color)
 
-    def shift(self, p1, p2):
+    def shift(self, p1: str, p2: str) -> None:
         p1, p2 = p1.upper(), p2.upper()
         piece = self[p1]
         try:
@@ -47,7 +49,7 @@ class Board(dict):
             self.move(p1, p2)
             self.complete_move(piece, dest, p1,p2)
 
-    def move(self, p1, p2):
+    def move(self, p1: str, p2: str) -> None:
         piece = self[p1]
         try:
             dest  = self[p2]
@@ -56,7 +58,7 @@ class Board(dict):
         del self[p1]
         self[p2] = piece
 
-    def complete_move(self, piece, dest, p1, p2):
+    def complete_move(self, piece:Piece, dest: str, p1: str, p2: str) -> None:
         enemy = ('white' if piece.color == 'black' else 'black' )
         if piece.color == 'black':
             self.fullmove_number += 1
@@ -73,7 +75,7 @@ class Board(dict):
             self.halfmove_clock = 0
         self.history.append(movetext)
 
-    def all_moves_available(self, color):
+    def all_moves_available(self, color: str) -> list:
         
         result = []
         for coord in self.keys():
@@ -82,7 +84,7 @@ class Board(dict):
                 if moves: result += moves
         return result
 
-    def occupied(self, color):
+    def occupied(self, color: str) -> list:
         result = []
         
 
@@ -91,12 +93,12 @@ class Board(dict):
                 result.append(coord)
         return result
 
-    def position_of_king(self, color):
+    def position_of_king(self, color: str) -> str:
         for pos in self.keys():
             if isinstance(self[pos], pieces.King) and self[pos].color == color:
                 return pos
 
-    def king_in_check(self, color):
+    def king_in_check(self, color: str) -> bool:
         kingpos =  self.position_of_king(color)
         opponent = ('black' if color =='white' else 'white')
         for pieces in self.iteritems():
@@ -105,19 +107,19 @@ class Board(dict):
             else:
                 return False
 
-    def alpha_notation(self,xycoord):
+    def alpha_notation(self, xycoord: str) -> str:
         if xycoord[0] < 0 or xycoord[0] > 7 or xycoord[1] < 0 or xycoord[1] > 7: return
         return self.y_axis[xycoord[1]] + str(self.x_axis[xycoord[0]])
 
-    def num_notation(self, coord):
+    def num_notation(self, coord: str) -> tuple:
         return int(coord[1])-1, self.y_axis.index(coord[0])
 
-    def is_on_board(self, coord):
+    def is_on_board(self, coord: str) -> bool:
         if coord[1] < 0 or coord[1] > 7 or coord[0] < 0 or coord[0] > 7:
             return False
         else: return True
 
-    def show(self, pat):
+    def show(self, pat: str) -> None:
         self.clear()
         pat = pat.split(' ')
         def expand(match): return ' ' * int(match.group(0))

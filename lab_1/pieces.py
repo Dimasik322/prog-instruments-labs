@@ -1,10 +1,12 @@
 #coding:utf8
 import sys
 
+from chessboard import Board
+
 SHORT_NAME = {'R':'Rook', 'N':'Knight', 'B':'Bishop', 'Q':'Queen', 'K':'King', 'P':'Pawn'}
 
 
-def create_piece(piece, color='white'):
+def create_piece(piece, color='white') -> dict:
     if piece in (None, ' '): return
     if len(piece) == 1:
         if piece.isupper(): color = 'white'
@@ -16,17 +18,17 @@ def create_piece(piece, color='white'):
 
 class Piece(object):
 
-    def __init__(self, color):
+    def __init__(self, color: str) -> None:
         if color == 'black':
             self.shortname = self.shortname.lower()
         elif color == 'white':
             self.shortname = self.shortname.upper()
         self.color = color
 
-    def place(self, board):
+    def place(self, board: Board) -> None:
         self.board = board
 
-    def moves_available(self, pos, orthogonal, diagonal, distance):
+    def moves_available(self, pos: str, orthogonal: bool, diagonal: bool, distance: int) -> map:
         board = self.board
         allowed_moves = []
         orth  = ((-1,0),(0,-1),(0,1),(1,0))
@@ -57,31 +59,31 @@ class Piece(object):
 
 class King(Piece):
     shortname = 'k'
-    def moves_available(self,pos):
+    def moves_available(self, pos: str) -> map:
         return super(King, self).moves_available(pos.upper(), True, True, 1)
 
 
 class Queen(Piece):
     shortname = 'q'
-    def moves_available(self,pos):
+    def moves_available(self, pos: str) -> map:
         return super(Queen, self).moves_available(pos.upper(), True, True, 8)
 
 
 class Rook(Piece):
     shortname = 'r'
-    def moves_available(self,pos):
+    def moves_available(self, pos: str) -> map:
         return super(Rook, self).moves_available(pos.upper(), True, False, 8)
 
 
 class Bishop(Piece):
     shortname = 'b'
-    def moves_available(self,pos):
+    def moves_available(self, pos: str) -> map:
         return super(Bishop,self).moves_available(pos.upper(), False, True, 8)
 
 
 class Knight(Piece):
     shortname = 'n'
-    def moves_available(self,pos):
+    def moves_available(self, pos: str) -> map:
         board = self.board
         allowed_moves = []
         beginningpos = board.num_notation(pos.upper())
@@ -97,7 +99,7 @@ class Knight(Piece):
 
 class Pawn(Piece):
     shortname = 'p'
-    def moves_available(self, pos):
+    def moves_available(self, pos: str) -> map:
         board = self.board
         piece = self
         if self.color == 'white':

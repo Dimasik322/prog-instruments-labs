@@ -1,8 +1,9 @@
 #coding:utf8
-import chessboard
-from tkinter import Menu, Frame, Label, Canvas
+from tkinter import Menu, Frame, Label, Canvas, Tk
 from tkinter import RIGHT, BOTTOM
 from PIL import ImageTk
+
+import chessboard
 
 
 class GUI():
@@ -17,7 +18,7 @@ class GUI():
     columns = 8
     dim_square = 64
 
-    def __init__(self, parent, chessboard):
+    def __init__(self, parent: Tk, chessboard: chessboard.Board) -> None:
         self.chessboard = chessboard
         self.parent = parent
         #Adding Top Menu
@@ -40,13 +41,13 @@ class GUI():
         self.draw_board()
         self.canvas.bind("<Button-1>", self.square_clicked)
 
-    def new_game(self):
+    def new_game(self) -> None:
         self.chessboard.show(chessboard.START_PATTERN)
         self.draw_board()
         self.draw_pieces()
         self.info_label.config(text="   White to Start the Game  ", fg='red')
 
-    def square_clicked(self, event):
+    def square_clicked(self, event: str) -> None:
         col_size = row_size = self.dim_square
         selected_column = event.x / col_size
         selected_row = 7 - (event.y / row_size)
@@ -65,7 +66,7 @@ class GUI():
         self.focus(pos)
         self.draw_board()
 
-    def shift(self, p1, p2):
+    def shift(self, p1: str, p2: str) -> None:
         piece = self.chessboard[p1]
         try:
             dest_piece = self.chessboard[p2]
@@ -80,7 +81,7 @@ class GUI():
                 turn = ('white' if piece.color == 'black' else 'black')
                 self.info_label["text"] = '' + piece.color.capitalize() +"  :  "+ p1 + p2 + '    ' + turn.capitalize() + '\'s turn'
 
-    def focus(self, pos):
+    def focus(self, pos: str) -> None:
         try:
             piece = self.chessboard[pos]
         except:
@@ -89,7 +90,7 @@ class GUI():
             self.selected_piece = (self.chessboard[pos], pos)
             self.focused = map(self.chessboard.num_notation, (self.chessboard[pos].moves_available(pos)))
 
-    def draw_board(self):
+    def draw_board(self) -> None:
         color = self.color2
         for row in range(self.rows):
             color = self.color1 if color == self.color2 else self.color2
@@ -111,7 +112,7 @@ class GUI():
         self.canvas.tag_raise("occupied")
         self.canvas.tag_lower("area")
         
-    def draw_pieces(self):
+    def draw_pieces(self) -> None:
         self.canvas.delete("occupied")
         for coord, piece in self.chessboard.iteritems():
             x,y = self.chessboard.num_notation(coord)
@@ -126,7 +127,7 @@ class GUI():
                 self.canvas.coords(piecename, x0, y0)
 
         
-def main(chessboard):
+def main(chessboard) -> None:
     root = Tk()
     root.title("Chess")
     gui = GUI(root, chessboard)
