@@ -13,7 +13,7 @@ class GUI():
     images = {}
     color1 = "#DDB88C"
     color2 = "#A66D4F"
-    highlightcolor ="khaki"
+    highlightcolor = "khaki"
     rows = 8
     columns = 8
     dim_square = 64
@@ -74,7 +74,7 @@ class GUI():
             dest_piece = None
         if dest_piece is None or dest_piece.color != piece.color:
             try:
-                self.chessboard.shift(p1,p2)
+                self.chessboard.shift(p1, p2)
             except chessboard.ChessError as error:
                 self.info_label["text"] = error.__class__.__name__
             else:
@@ -96,7 +96,7 @@ class GUI():
             color = self.color1 if color == self.color2 else self.color2
             for col in range(self.columns):
                 x1 = (col * self.dim_square)
-                y1 = ((7-row) * self.dim_square)
+                y1 = ((7 - row) * self.dim_square)
                 x2 = x1 + self.dim_square
                 y2 = y1 + self.dim_square
                 if(self.focused is not None and (row, col) in self.focused):
@@ -106,8 +106,8 @@ class GUI():
                 color = self.color1 if color == self.color2 else self.color2
         for name in self.pieces:
             self.pieces[name] = (self.pieces[name][0], self.pieces[name][1])
-            x0 = (self.pieces[name][1] * self.dim_square) + int(self.dim_square/2)
-            y0 = ((7-self.pieces[name][0]) * self.dim_square) + int(self.dim_square/2)
+            x0 = (self.pieces[name][1] * self.dim_square) + int(self.dim_square / 2)
+            y0 = ((7-self.pieces[name][0]) * self.dim_square) + int(self.dim_square / 2)
             self.canvas.coords(name, x0, y0)
         self.canvas.tag_raise("occupied")
         self.canvas.tag_lower("area")
@@ -121,9 +121,9 @@ class GUI():
                 piecename = "%s%s%s" % (piece.shortname, x, y)
                 if(filename not in self.images):
                     self.images[filename] = ImageTk.PhotoImage(file=filename)
-                self.canvas.create_image(0,0, image=self.images[filename], tags=(piecename, "occupied"), anchor="c")
-                x0 = (y * self.dim_square) + int(self.dim_square/2)
-                y0 = ((7-x) * self.dim_square) + int(self.dim_square/2)
+                self.canvas.create_image(0, 0, image=self.images[filename], tags=(piecename, "occupied"), anchor="c")
+                x0 = (y * self.dim_square) + int(self.dim_square / 2)
+                y0 = ((7 - x) * self.dim_square) + int(self.dim_square / 2)
                 self.canvas.coords(piecename, x0, y0)
 
         

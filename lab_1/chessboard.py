@@ -11,7 +11,7 @@ START_PATTERN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w 0 1'
 class Board(dict):
     y_axis = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
     x_axis = (1, 2, 3, 4, 5, 6, 7, 8)
-    captured_pieces = { 'white': [], 'black': [] }
+    captured_pieces = { 'white' : [], 'black' : [] }
     player_turn = None
     halfmove_clock = 0
     fullmove_number = 1
@@ -22,7 +22,7 @@ class Board(dict):
 
     def is_in_check_after_move(self, p1: str, p2: str) -> bool:
         tmp = deepcopy(self)
-        tmp.move(p1,p2)
+        tmp.move(p1, p2)
         return tmp.king_in_check(self[p1].color)
 
     def shift(self, p1: str, p2: str) -> None:
@@ -39,7 +39,7 @@ class Board(dict):
         if p2 not in moves_available:
             raise InvalidMove
         if self.all_moves_available(enemy):
-            if self.is_in_check_after_move(p1,p2):
+            if self.is_in_check_after_move(p1, p2):
                 raise Check
         if not moves_available and self.king_in_check(piece.color):
             raise CheckMate
@@ -47,7 +47,7 @@ class Board(dict):
             raise Draw
         else:
             self.move(p1, p2)
-            self.complete_move(piece, dest, p1,p2)
+            self.complete_move(piece, dest, p1, p2)
 
     def move(self, p1: str, p2: str) -> None:
         piece = self[p1]
@@ -62,7 +62,7 @@ class Board(dict):
         enemy = ('white' if piece.color == 'black' else 'black' )
         if piece.color == 'black':
             self.fullmove_number += 1
-        self.halfmove_clock +=1
+        self.halfmove_clock += 1
         self.player_turn = enemy
         abbr = piece.shortname
         if abbr == 'P':
@@ -86,8 +86,6 @@ class Board(dict):
 
     def occupied(self, color: str) -> list:
         result = []
-        
-
         for coord in self.iterkeys():
             if self[coord].color == color:
                 result.append(coord)
@@ -112,7 +110,7 @@ class Board(dict):
         return self.y_axis[xycoord[1]] + str(self.x_axis[xycoord[0]])
 
     def num_notation(self, coord: str) -> tuple:
-        return int(coord[1])-1, self.y_axis.index(coord[0])
+        return int(coord[1]) - 1, self.y_axis.index(coord[0])
 
     def is_on_board(self, coord: str) -> bool:
         if coord[1] < 0 or coord[1] > 7 or coord[0] < 0 or coord[0] > 7:
@@ -127,7 +125,7 @@ class Board(dict):
         for x, row in enumerate(pat[0].split('/')):
             for y, letter in enumerate(row):
                 if letter == ' ': continue
-                coord = self.alpha_notation((7-x,y))
+                coord = self.alpha_notation((7 - x, y))
                 self[coord] = pieces.create_piece(letter)
                 self[coord].place(self)
         if pat[1] == 'w': self.player_turn = 'white'
