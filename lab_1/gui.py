@@ -7,6 +7,9 @@ import chessboard
 
 
 class GUI():
+    """
+    A class that contains GUI for chess game
+    """
     pieces = {}
     selected_piece = None
     focused = None
@@ -19,6 +22,11 @@ class GUI():
     dim_square = 64
 
     def __init__(self, parent: Tk, chessboard: chessboard.Board) -> None:
+        """
+        Initializes GUI class object with parent object and chessboard
+        parent: parent object
+        chessboard: current chessboard
+        """
         self.chessboard = chessboard
         self.parent = parent
         #Adding Top Menu
@@ -43,12 +51,19 @@ class GUI():
         self.canvas.bind("<Button-1>", self.square_clicked)
 
     def new_game(self) -> None:
+        """
+        Starts a new game
+        """
         self.chessboard.show(chessboard.START_PATTERN)
         self.draw_board()
         self.draw_pieces()
         self.info_label.config(text="   White to Start the Game  ", fg='red')
 
     def square_clicked(self, event: str) -> None:
+        """
+        Does event if square is clicked
+        event: event that is needed to do
+        """
         col_size = row_size = self.dim_square
         selected_column = event.x / col_size
         selected_row = 7 - (event.y / row_size)
@@ -68,6 +83,11 @@ class GUI():
         self.draw_board()
 
     def shift(self, p1: str, p2: str) -> None:
+        """
+        Shifts piece from start to end position
+        p1: start position
+        p2: end position
+        """
         piece = self.chessboard[p1]
         try:
             dest_piece = self.chessboard[p2]
@@ -84,6 +104,10 @@ class GUI():
                     "  :  "+ p1 + p2 + '    ' + turn.capitalize() + '\'s turn'
 
     def focus(self, pos: str) -> None:
+        """
+        Selects piece at position
+        pos: position of piece
+        """
         try:
             piece = self.chessboard[pos]
         except:
@@ -94,6 +118,7 @@ class GUI():
                                (self.chessboard[pos].moves_available(pos)))
 
     def draw_board(self) -> None:
+        """Draws a chessboard at current state"""
         color = self.color2
         for row in range(self.rows):
             color = self.color1 if color == self.color2 else self.color2
@@ -117,6 +142,9 @@ class GUI():
         self.canvas.tag_lower("area")
         
     def draw_pieces(self) -> None:
+        """
+        Draws pieces on a board
+        """
         self.canvas.delete("occupied")
         for coord, piece in self.chessboard.iteritems():
             x,y = self.chessboard.num_notation(coord)
@@ -132,7 +160,11 @@ class GUI():
                 self.canvas.coords(piecename, x0, y0)
 
         
-def main(chessboard) -> None:
+def main(chessboard: chessboard.Board) -> None:
+    """
+    Starts game with GUI and chessboard
+    chessboard: current chessboard
+    """
     root = Tk()
     root.title("Chess")
     gui = GUI(root, chessboard)

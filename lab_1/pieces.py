@@ -14,6 +14,9 @@ SHORT_NAME = {
 
 
 def create_piece(piece, color='white') -> dict:
+    """Creates colored pieces
+    color: selected color
+    """
     if piece in (None, ' '): return
     if len(piece) == 1:
         if piece.isupper(): color = 'white'
@@ -24,8 +27,15 @@ def create_piece(piece, color='white') -> dict:
 
 
 class Piece(object):
+    """
+    A class that simulates a piece
+    """
 
     def __init__(self, color: str) -> None:
+        """
+        Initializes piece object with color and name
+        color: selected color
+        """
         if color == 'black':
             self.shortname = self.shortname.lower()
         elif color == 'white':
@@ -33,10 +43,21 @@ class Piece(object):
         self.color = color
 
     def place(self, board: Board) -> None:
+        """
+        Sets current board to piece
+        board: current board
+        """
         self.board = board
 
     def moves_available(self, pos: str, orthogonal: bool, 
                         diagonal: bool, distance: int) -> map:
+        """
+        Returns a map of available moves
+        pos: position of piece
+        orthogonal: is orthogonal
+        diagonal: is diagonal
+        distance: distance of move
+        """
         board = self.board
         allowed_moves = []
         orth  = ((-1, 0), (0, -1), (0, 1), (1, 0))
@@ -67,32 +88,67 @@ class Piece(object):
 
 
 class King(Piece):
+    """
+    A class that simulates a King piece
+    """
     shortname = 'k'
     def moves_available(self, pos: str) -> map:
+        """
+        Returns a map of available moves
+        pos: current piece position
+        """
         return super(King, self).moves_available(pos.upper(), True, True, 1)
 
 
 class Queen(Piece):
+    """
+    A class that simulates a Queen piece
+    """
     shortname = 'q'
     def moves_available(self, pos: str) -> map:
+        """
+        Returns a map of available moves
+        pos: current piece position
+        """
         return super(Queen, self).moves_available(pos.upper(), True, True, 8)
 
 
 class Rook(Piece):
+    """
+    A class that simulates a Rook piece
+    """
     shortname = 'r'
     def moves_available(self, pos: str) -> map:
+        """
+        Returns a map of available moves
+        pos: current piece position
+        """
         return super(Rook, self).moves_available(pos.upper(), True, False, 8)
 
 
 class Bishop(Piece):
+    """
+    A class that simulates a Bishop piece
+    """
     shortname = 'b'
     def moves_available(self, pos: str) -> map:
+        """
+        Returns a map of available moves
+        pos: current piece position
+        """
         return super(Bishop,self).moves_available(pos.upper(), False, True, 8)
 
 
 class Knight(Piece):
+    """
+    A class that simulates a Knight piece
+    """
     shortname = 'n'
     def moves_available(self, pos: str) -> map:
+        """
+        Returns a map of available moves
+        pos: current piece position
+        """
         board = self.board
         allowed_moves = []
         beginningpos = board.num_notation(pos.upper())
@@ -108,8 +164,15 @@ class Knight(Piece):
 
 
 class Pawn(Piece):
+    """
+    A class that simulates a Pawn piece
+    """
     shortname = 'p'
     def moves_available(self, pos: str) -> map:
+        """
+        Returns a map of available moves
+        pos: current piece position
+        """
         board = self.board
         piece = self
         if self.color == 'white':

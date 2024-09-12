@@ -9,6 +9,9 @@ START_PATTERN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w 0 1'
 
 
 class Board(dict):
+    """
+    A class that simulates chessboard
+    """
     y_axis = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
     x_axis = (1, 2, 3, 4, 5, 6, 7, 8)
     captured_pieces = { 'white' : [], 'black' : [] }
@@ -18,14 +21,28 @@ class Board(dict):
     history = []
 
     def __init__(self, pat: str = None) -> None:
+        """
+        Initializes Board object with pattern
+        pat: pattern that is needed to be set
+        """
         self.show(START_PATTERN)
 
     def is_in_check_after_move(self, p1: str, p2: str) -> bool:
+        """
+        Checks King piece after move
+        p1: start position
+        p2: end position
+        """
         tmp = deepcopy(self)
         tmp.move(p1, p2)
         return tmp.king_in_check(self[p1].color)
 
     def shift(self, p1: str, p2: str) -> None:
+        """
+        Shifts piece from start position to end position
+        p1: start position of piece
+        p2: end position of piece
+        """
         p1, p2 = p1.upper(), p2.upper()
         piece = self[p1]
         try:
@@ -50,6 +67,11 @@ class Board(dict):
             self.complete_move(piece, dest, p1, p2)
 
     def move(self, p1: str, p2: str) -> None:
+        """
+        Moves piece from start position to end position
+        p1: start position of piece
+        p2: end position of piece
+        """
         piece = self[p1]
         try:
             dest  = self[p2]
@@ -58,7 +80,14 @@ class Board(dict):
         del self[p1]
         self[p2] = piece
 
-    def complete_move(self, piece:Piece, dest: str, p1: str, p2: str) -> None:
+    def complete_move(self, piece: Piece, dest: str, p1: str, p2: str) -> None:
+        """
+        Moves piece to destination from start position to end position
+        piece: a piece that is needed to move
+        dest: destination
+        p1: start position of piece
+        p2: end position of piece
+        """
         enemy = ('white' if piece.color == 'black' else 'black' )
         if piece.color == 'black':
             self.fullmove_number += 1
@@ -76,7 +105,10 @@ class Board(dict):
         self.history.append(movetext)
 
     def all_moves_available(self, color: str) -> list:
-        
+        """
+        Returns all available moves for piece
+        color: color of side
+        """
         result = []
         for coord in self.keys():
             if (self[coord] is not None) and self[coord].color == color:
@@ -85,6 +117,10 @@ class Board(dict):
         return result
 
     def occupied(self, color: str) -> list:
+        """
+        Returns all occupied cells
+        color: color of side
+        """
         result = []
         for coord in self.iterkeys():
             if self[coord].color == color:
@@ -92,11 +128,19 @@ class Board(dict):
         return result
 
     def position_of_king(self, color: str) -> str:
+        """
+        Returns position of King piece
+        color: color of side
+        """
         for pos in self.keys():
             if isinstance(self[pos], pieces.King) and self[pos].color == color:
                 return pos
 
     def king_in_check(self, color: str) -> bool:
+        """
+        Checks if King piece is in check
+        color: color of side
+        """
         kingpos =  self.position_of_king(color)
         opponent = ('black' if color =='white' else 'white')
         for pieces in self.iteritems():
@@ -106,18 +150,34 @@ class Board(dict):
                 return False
 
     def alpha_notation(self, xycoord: str) -> str:
+        """
+        Normilizes xy coordinates by sizes of board
+        xycoords: xy coordinates
+        """
         if xycoord[0] < 0 or xycoord[0] > 7 or xycoord[1] < 0 or xycoord[1] > 7: return
         return self.y_axis[xycoord[1]] + str(self.x_axis[xycoord[0]])
 
     def num_notation(self, coord: str) -> tuple:
+        """
+        Returns inverted coordinates
+        coord: current coordinates
+        """
         return int(coord[1]) - 1, self.y_axis.index(coord[0])
 
     def is_on_board(self, coord: str) -> bool:
+        """
+        Check if coordinates are on board
+        coords: coordinates which are needed to check
+        """
         if coord[1] < 0 or coord[1] > 7 or coord[0] < 0 or coord[0] > 7:
             return False
         else: return True
 
     def show(self, pat: str) -> None:
+        """
+        Shows Board in current state
+        pat: pattern of board
+        """
         self.clear()
         pat = pat.split(' ')
         def expand(match): return ' ' * int(match.group(0))
