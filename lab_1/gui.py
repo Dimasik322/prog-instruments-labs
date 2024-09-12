@@ -30,7 +30,8 @@ class GUI():
 
         #Adding Frame
         self.btmfrm = Frame(parent, height=64)
-        self.info_label = Label(self.btmfrm, text="   White to Start the Game  ", fg=self.color2)
+        self.info_label = Label(self.btmfrm, 
+                                text="   White to Start the Game  ", fg=self.color2)
         self.info_label.pack(side=RIGHT, padx=8, pady=5)
         self.btmfrm.pack(fill="x", side=BOTTOM)
         
@@ -79,7 +80,8 @@ class GUI():
                 self.info_label["text"] = error.__class__.__name__
             else:
                 turn = ('white' if piece.color == 'black' else 'black')
-                self.info_label["text"] = '' + piece.color.capitalize() +"  :  "+ p1 + p2 + '    ' + turn.capitalize() + '\'s turn'
+                self.info_label["text"] = '' + piece.color.capitalize() + \
+                    "  :  "+ p1 + p2 + '    ' + turn.capitalize() + '\'s turn'
 
     def focus(self, pos: str) -> None:
         try:
@@ -88,7 +90,8 @@ class GUI():
             piece=None
         if piece is not None and (piece.color == self.chessboard.player_turn):
             self.selected_piece = (self.chessboard[pos], pos)
-            self.focused = map(self.chessboard.num_notation, (self.chessboard[pos].moves_available(pos)))
+            self.focused = map(self.chessboard.num_notation, 
+                               (self.chessboard[pos].moves_available(pos)))
 
     def draw_board(self) -> None:
         color = self.color2
@@ -100,7 +103,8 @@ class GUI():
                 x2 = x1 + self.dim_square
                 y2 = y1 + self.dim_square
                 if(self.focused is not None and (row, col) in self.focused):
-                    self.canvas.create_rectangle(x1, y1, x2, y2,  fill=self.highlightcolor, tags="area")
+                    self.canvas.create_rectangle(x1, y1, x2, y2,  
+                                                 fill=self.highlightcolor, tags="area")
                 else:
                     self.canvas.create_rectangle(x1, y1, x2, y2,  fill=color, tags="area")
                 color = self.color1 if color == self.color2 else self.color2
@@ -117,11 +121,12 @@ class GUI():
         for coord, piece in self.chessboard.iteritems():
             x,y = self.chessboard.num_notation(coord)
             if piece is not None:
-                filename = "pieces_image/%s%s.png" % (piece.shortname.lower(),piece.color)
+                filename = "pieces_image/%s%s.png" % (piece.shortname.lower(), piece.color)
                 piecename = "%s%s%s" % (piece.shortname, x, y)
                 if(filename not in self.images):
                     self.images[filename] = ImageTk.PhotoImage(file=filename)
-                self.canvas.create_image(0, 0, image=self.images[filename], tags=(piecename, "occupied"), anchor="c")
+                self.canvas.create_image(0, 0, image=self.images[filename], 
+                                         tags=(piecename, "occupied"), anchor="c")
                 x0 = (y * self.dim_square) + int(self.dim_square / 2)
                 y0 = ((7 - x) * self.dim_square) + int(self.dim_square / 2)
                 self.canvas.coords(piecename, x0, y0)

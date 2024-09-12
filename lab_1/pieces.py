@@ -3,7 +3,14 @@ import sys
 
 from chessboard import Board
 
-SHORT_NAME = {'R':'Rook', 'N':'Knight', 'B':'Bishop', 'Q':'Queen', 'K':'King', 'P':'Pawn'}
+SHORT_NAME = {
+    'R' : 'Rook', 
+    'N' : 'Knight', 
+    'B' : 'Bishop', 
+    'Q' : 'Queen', 
+    'K' : 'King', 
+    'P' : 'Pawn'
+}
 
 
 def create_piece(piece, color='white') -> dict:
@@ -28,7 +35,8 @@ class Piece(object):
     def place(self, board: Board) -> None:
         self.board = board
 
-    def moves_available(self, pos: str, orthogonal: bool, diagonal: bool, distance: int) -> map:
+    def moves_available(self, pos: str, orthogonal: bool, 
+                        diagonal: bool, distance: int) -> map:
         board = self.board
         allowed_moves = []
         orth  = ((-1, 0), (0, -1), (0, 1), (1, 0))
@@ -46,7 +54,8 @@ class Piece(object):
             for step in range(1, distance+1):
                 if collision: break
                 dest = beginningpos[0] + step * x, beginningpos[1] + step * y
-                if self.board.alpha_notation(dest) not in board.occupied('white') + board.occupied('black'):
+                if self.board.alpha_notation(dest) not in board.occupied('white') + \
+                board.occupied('black'):
                     allowed_moves.append(dest)
                 elif self.board.alpha_notation(dest) in board.occupied(piece.color):
                     collision = True
@@ -88,7 +97,8 @@ class Knight(Piece):
         allowed_moves = []
         beginningpos = board.num_notation(pos.upper())
         piece = board.get(pos.upper())
-        deltas = ((-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1) ,(2, 1))
+        deltas = ((-2, -1), (-2, 1), (-1, -2), (-1, 2), 
+                  (1, -2), (1, 2), (2, -1) , (2, 1))
         for x,y in deltas:
             dest = beginningpos[0] + x, beginningpos[1] + y
             if(board.alpha_notation(dest) not in board.occupied(piece.color)):
