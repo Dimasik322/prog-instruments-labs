@@ -1,7 +1,7 @@
 #coding:utf8
 import chessboard
-import pieces
-from Tkinter import *
+from tkinter import Menu, Frame, Label, Canvas
+from tkinter import RIGHT, BOTTOM
 from PIL import ImageTk
 
 

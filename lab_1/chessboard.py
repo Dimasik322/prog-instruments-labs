@@ -1,7 +1,7 @@
 #coding:utf8
-from copy import deepcopy
 import re
 import pieces
+from copy import deepcopy
 
 START_PATTERN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w 0 1'
 
