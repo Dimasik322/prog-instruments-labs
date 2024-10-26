@@ -1,11 +1,19 @@
+import re
 import json
 import hashlib
+import logging
 from typing import List
+import csv
+
+logging.basicConfig(level=logging.INFO)
+
+FILE_PATH = "lab_3\\13.csv"
+RESULT_PATH = "lab_3\\result.json"
+PATTERN = { }
 
 """
 В этом модуле обитают функции, необходимые для автоматизированной проверки результатов ваших трудов.
 """
-
 
 def calculate_checksum(row_numbers: List[int]) -> str:
     """
@@ -38,9 +46,25 @@ def serialize_result(variant: int, checksum: str) -> None:
     :param variant: номер вашего варианта
     :param checksum: контрольная сумма, вычисленная через calculate_checksum()
     """
-    pass
+    try:
+        with open(RESULT_PATH, 'w', encoding='utf-8') as file:
+            result = {
+                "variant" : variant,
+                "checksum" : checksum
+            }
+            file.write(json.dumps(result))
+    except Exception as exc:
+        logging.error(f"Serializing of result error: {exc}\n")
+
+
+def read_csv(file_path: str) -> List:
+    with open(file_path, 'r', encoding='utf-8') as file:
+        reader = csv.reader(file, delimiter=';')
+        head = next(reader)
+        rows = [row for row in reader]
+        print(rows[4])
+    
 
 
 if __name__ == "__main__":
-    print(calculate_checksum([1, 2, 3]))
-    print(calculate_checksum([3, 2, 1]))
+    read_csv(FILE_PATH)
