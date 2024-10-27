@@ -9,7 +9,18 @@ logging.basicConfig(level=logging.INFO)
 
 FILE_PATH = "lab_3\\13.csv"
 RESULT_PATH = "lab_3\\result.json"
-PATTERN = { }
+PATTERN = {
+    "email": r"^\w+(\.\w+)*@\w+(\.\w+)+$",
+    "http_status_message": r"^\d{3}(\s\w+)+$",
+    "inn": r"^\d{12}$",
+    "passport": r"^\d{2}\s\d{2}\s\d{6}$",
+    "ip_v4": r"^((25[0-5]|2[0-4]|[01]?[0-9][0-9]?).){3}(25[0-5]|2[0-4]|[01]?[0-9][0-9]?).$",
+    "latitude": r"^(-?(180(.0+)?|1[0-7][0-9](.[0-9]+)?|[1-9]?[0-9](.[0-9]+)?))$",
+    "hex_color": r"^#[a-f0-9]{6}$",
+    "isbn": r"^d{3}-\d-\d{5}-\d{3}-\d$",
+    "uuid": r"^[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}$",
+    "time": r'^([01]\d|2[0-3]):[0-5]\d:[0-5]\d.\d+$'
+}
 
 """
 В этом модуле обитают функции, необходимые для автоматизированной проверки результатов ваших трудов.
@@ -87,7 +98,9 @@ def get_invalid_indeces(rows: list, pattern: dict) -> list:
 
 
 if __name__ == "__main__":
-    rows = read_csv(FILE_PATH)
-    invalid_indeces = get_invalid_indeces(rows, PATTERN)
-    checksum = calculate_checksum(invalid_indeces)
-    serialize_result(checksum)
+    print(bool(re.match(PATTERN["time"], '24:10:10.1')))
+    #rows = read_csv(FILE_PATH)
+    #invalid_indeces = get_invalid_indeces(rows, PATTERN)
+    #print(len(invalid_indeces))
+    #checksum = calculate_checksum(invalid_indeces)
+    #serialize_result(checksum)
