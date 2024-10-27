@@ -17,9 +17,9 @@ PATTERN = {
     "ip_v4": r"^((25[0-5]|2[0-4]|[01]?[0-9][0-9]?).){3}(25[0-5]|2[0-4]|[01]?[0-9][0-9]?).$",
     "latitude": r"^(-?(180(.0+)?|1[0-7][0-9](.[0-9]+)?|[1-9]?[0-9](.[0-9]+)?))$",
     "hex_color": r"^#[a-f0-9]{6}$",
-    "isbn": r"^d{3}-\d-\d{5}-\d{3}-\d$",
+    "isbn": r"^(\d{3}-\d-\d{5}-\d{3})-\d$",
     "uuid": r"^[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}$",
-    "time": r'^([01]\d|2[0-3]):[0-5]\d:[0-5]\d.\d+$'
+    "time": r"^([01]\d|2[0-3]):[0-5]\d:[0-5]\d.\d+$"
 }
 
 """
@@ -46,7 +46,6 @@ def calculate_checksum(row_numbers: List[int]) -> str:
         return hashlib.md5(json.dumps(row_numbers).encode('utf-8')).hexdigest()
     except Exception as exc:
         logging.error(f"Checksum calculating error: {exc}\n")
-
 
 
 def serialize_result(variant: int, checksum: str) -> None:
@@ -85,22 +84,30 @@ def read_csv(file_path: str) -> list:
 
 def check_validity(row: list, pattern: dict) -> bool:
     try:
-        pass
+        flag = True
+        for pair in list(zip(list(pattern.values()), row)):
+            if not bool(re.match(pair[0], pair[1])):
+                print(pair[0], row)
+                flag = False
+        return flag
     except Exception as exc:
         logging.error(f"Checking row validity error: {exc}\n")    
 
 
 def get_invalid_indeces(rows: list, pattern: dict) -> list:
     try:
-        pass
+        invalid_rows_indeces = []
+        for index in range(len(rows)):
+            if not check_validity(rows[index], pattern):
+                invalid_rows_indeces.append(index + 2)
+        return invalid_rows_indeces
     except Exception as exc:
         logging.error(f"Getting indeces of invalid rows error: {exc}\n")
 
 
 if __name__ == "__main__":
-    print(bool(re.match(PATTERN["time"], '24:10:10.1')))
-    #rows = read_csv(FILE_PATH)
-    #invalid_indeces = get_invalid_indeces(rows, PATTERN)
-    #print(len(invalid_indeces))
+    rows = read_csv(FILE_PATH)
+    invalid_indeces = get_invalid_indeces(rows, PATTERN)
+    print(len(invalid_indeces))
     #checksum = calculate_checksum(invalid_indeces)
     #serialize_result(checksum)
