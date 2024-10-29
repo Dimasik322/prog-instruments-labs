@@ -7,7 +7,8 @@ from typing import List
 
 logging.basicConfig(level=logging.INFO)
 
-FILE_PATH = "lab_3\\13.csv"
+VARIANT = "13"
+FILE_PATH = f"lab_3\\{VARIANT}.csv"
 RESULT_PATH = "lab_3\\result.json"
 PATTERN = {
     "email": r"^\w+(\.\w+)*@\w+(\.\w+)+$",
@@ -72,6 +73,11 @@ def serialize_result(variant: int, checksum: str) -> None:
 
 
 def read_csv(file_path: str) -> list:
+    """
+    Reads csv file into list of rows
+    :param file_path: string path to file
+    :return: list of rows
+    """
     try:
         with open(file_path, 'r', encoding='utf-16') as file:
             reader = csv.reader(file, delimiter=';')
@@ -83,11 +89,16 @@ def read_csv(file_path: str) -> list:
     
 
 def check_validity(row: list, pattern: dict) -> bool:
+    """
+    Checks validity of given row by given pattern
+    :param row: list of values
+    :param pattern: dictionary of patterns for values in row
+    :return: bool
+    """
     try:
         flag = True
         for pair in list(zip(list(pattern.values()), row)):
             if not bool(re.match(pair[0], pair[1])):
-                print(pair)
                 flag = False
         return flag
     except Exception as exc:
@@ -95,6 +106,12 @@ def check_validity(row: list, pattern: dict) -> bool:
 
 
 def get_invalid_indeces(rows: list, pattern: dict) -> list:
+    """
+    Checks and returns list of invalid indeces of rows
+    :param rows: list of rows to check
+    :param pattern: dictionary of patterns for values in row
+    :return: list of invalid indeces of rows
+    """
     try:
         invalid_rows_indeces = []
         for index in range(len(rows)):
@@ -108,7 +125,5 @@ def get_invalid_indeces(rows: list, pattern: dict) -> list:
 if __name__ == "__main__":
     rows = read_csv(FILE_PATH)
     invalid_indeces = get_invalid_indeces(rows, PATTERN)
-    print(len(invalid_indeces))
-    #print(bool(re.match(PATTERN["ip_v4"], '109.156.122.212')))
-    #checksum = calculate_checksum(invalid_indeces)
-    #serialize_result(checksum)
+    checksum = calculate_checksum(invalid_indeces)
+    serialize_result(VARIANT, checksum)
