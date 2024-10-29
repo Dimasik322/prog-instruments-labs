@@ -14,10 +14,10 @@ PATTERN = {
     "http_status_message": r"^\d{3}(\s\w+)+$",
     "inn": r"^\d{12}$",
     "passport": r"^\d{2}\s\d{2}\s\d{6}$",
-    "ip_v4": r"^((25[0-5]|2[0-4]|[01]?[0-9][0-9]?).){3}(25[0-5]|2[0-4]|[01]?[0-9][0-9]?).$",
+    "ip_v4": r"^((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])$",
     "latitude": r"^(-?(180(.0+)?|1[0-7][0-9](.[0-9]+)?|[1-9]?[0-9](.[0-9]+)?))$",
     "hex_color": r"^#[a-f0-9]{6}$",
-    "isbn": r"^(\d{3}-\d-\d{5}-\d{3})-\d$",
+    "isbn": r"^(\d{3}-)?\d{1}-\d{5}-\d{3}-\d{1}$",
     "uuid": r"^[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}$",
     "time": r"^([01]\d|2[0-3]):[0-5]\d:[0-5]\d.\d+$"
 }
@@ -87,7 +87,7 @@ def check_validity(row: list, pattern: dict) -> bool:
         flag = True
         for pair in list(zip(list(pattern.values()), row)):
             if not bool(re.match(pair[0], pair[1])):
-                print(pair[0], row)
+                print(pair)
                 flag = False
         return flag
     except Exception as exc:
@@ -109,5 +109,6 @@ if __name__ == "__main__":
     rows = read_csv(FILE_PATH)
     invalid_indeces = get_invalid_indeces(rows, PATTERN)
     print(len(invalid_indeces))
+    #print(bool(re.match(PATTERN["ip_v4"], '109.156.122.212')))
     #checksum = calculate_checksum(invalid_indeces)
     #serialize_result(checksum)
