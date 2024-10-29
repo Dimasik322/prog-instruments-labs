@@ -15,8 +15,8 @@ PATTERN = {
     "http_status_message": r"^\d{3}(\s\w+)+$",
     "inn": r"^\d{12}$",
     "passport": r"^\d{2}\s\d{2}\s\d{6}$",
-    "ip_v4": r"^((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])$",
-    "latitude": r"^(-?(180(.0+)?|1[0-7][0-9](.[0-9]+)?|[1-9]?[0-9](.[0-9]+)?))$",
+    "ip_v4": r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9]?[0-9])$",
+    "latitude": r"^[+-]?(90\.0+|[0-8]?[0-9]\.[0-9]+)$",
     "hex_color": r"^#[a-f0-9]{6}$",
     "isbn": r"^(\d{3}-)?\d{1}-\d{5}-\d{3}-\d{1}$",
     "uuid": r"^[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}$",
@@ -73,11 +73,6 @@ def serialize_result(variant: int, checksum: str) -> None:
 
 
 def read_csv(file_path: str) -> list:
-    """
-    Reads csv file into list of rows
-    :param file_path: string path to file
-    :return: list of rows
-    """
     try:
         with open(file_path, 'r', encoding='utf-16') as file:
             reader = csv.reader(file, delimiter=';')
@@ -89,12 +84,6 @@ def read_csv(file_path: str) -> list:
     
 
 def check_validity(row: list, pattern: dict) -> bool:
-    """
-    Checks validity of given row by given pattern
-    :param row: list of values
-    :param pattern: dictionary of patterns for values in row
-    :return: bool
-    """
     try:
         flag = True
         for pair in list(zip(list(pattern.values()), row)):
@@ -106,17 +95,11 @@ def check_validity(row: list, pattern: dict) -> bool:
 
 
 def get_invalid_indeces(rows: list, pattern: dict) -> list:
-    """
-    Checks and returns list of invalid indeces of rows
-    :param rows: list of rows to check
-    :param pattern: dictionary of patterns for values in row
-    :return: list of invalid indeces of rows
-    """
     try:
         invalid_rows_indeces = []
         for index in range(len(rows)):
             if not check_validity(rows[index], pattern):
-                invalid_rows_indeces.append(index + 2)
+                invalid_rows_indeces.append(index)
         return invalid_rows_indeces
     except Exception as exc:
         logging.error(f"Getting indeces of invalid rows error: {exc}\n")
